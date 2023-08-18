@@ -1,13 +1,4 @@
 import React, { useState } from "react";
-import {
-    List,
-    ListItem,
-    Collapse,
-    Checkbox,
-    FormControlLabel,
-} from "@mui/material";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
 
 interface Department {
     department: string;
@@ -20,15 +11,12 @@ const DepartmentList: React.FC<{ departments: Department[] }> = ({
     const [selected, setSelected] = useState<string[]>([]);
     const [expanded, setExpanded] = useState<string[]>([]);
 
-    const handleToggle =
-        (name: string) => (event: React.MouseEvent<HTMLDivElement>) => {
-            if ((event.target as HTMLElement).tagName !== "INPUT") {
-                const newSelected = selected.includes(name)
-                    ? selected.filter((item) => item !== name)
-                    : [...selected, name];
-                setSelected(newSelected);
-            }
-        };
+    const handleToggle = (name: string) => () => {
+        const newSelected = selected.includes(name)
+            ? selected.filter((item) => item !== name)
+            : [...selected, name];
+        setSelected(newSelected);
+    };
 
     const handleExpand = (name: string) => () => {
         const newExpanded = expanded.includes(name)
@@ -42,62 +30,43 @@ const DepartmentList: React.FC<{ departments: Department[] }> = ({
     const isExpanded = (name: string) => expanded.includes(name);
 
     return (
-        <List>
+        <ul>
             {departments.map((department) => (
-                <div key={department.department}>
-                    <ListItem
-                        button
-                        onClick={handleExpand(department.department)}
-                    >
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={isSelected(department.department)}
-                                />
-                            }
-                            label={department.department}
+                <li key={department.department}>
+                    <div onClick={handleExpand(department.department)}>
+                        <input
+                            type="checkbox"
+                            checked={isSelected(department.department)}
+                            onChange={handleToggle(department.department)}
                         />
-                        {isExpanded(department.department) ? (
-                            <ExpandLess />
-                        ) : (
-                            <ExpandMore />
-                        )}
-                    </ListItem>
-                    <Collapse
-                        in={isExpanded(department.department)}
-                        timeout="auto"
-                        unmountOnExit
-                    >
-                        <List component="div" disablePadding>
+                        {department.department}
+                        {isExpanded(department.department) ? " -" : " +"}
+                    </div>
+                    {isExpanded(department.department) && (
+                        <ul>
                             {department.sub_departments.map(
                                 (sub_department) => (
-                                    <div style={{ marginLeft: "40px" }}>
-                                        <ListItem
-                                            key={sub_department}
-                                            button
-                                            onClick={handleToggle(
-                                                sub_department
-                                            )}
-                                        >
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        checked={isSelected(
-                                                            sub_department
-                                                        )}
-                                                    />
-                                                }
-                                                label={sub_department}
+                                    <li key={sub_department}>
+                                        <div style={{ marginLeft: "20px" }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={isSelected(
+                                                    sub_department
+                                                )}
+                                                onChange={handleToggle(
+                                                    sub_department
+                                                )}
                                             />
-                                        </ListItem>
-                                    </div>
+                                            {sub_department}
+                                        </div>
+                                    </li>
                                 )
                             )}
-                        </List>
-                    </Collapse>
-                </div>
+                        </ul>
+                    )}
+                </li>
             ))}
-        </List>
+        </ul>
     );
 };
 
@@ -127,7 +96,7 @@ const departmentsData: Department[] = [
     },
 ];
 
-const Department: React.FC = () => {
+const DepartmentComponent: React.FC = () => {
     return (
         <div>
             <DepartmentList departments={departmentsData} />
@@ -135,4 +104,4 @@ const Department: React.FC = () => {
     );
 };
 
-export default Department;
+export default DepartmentComponent;
