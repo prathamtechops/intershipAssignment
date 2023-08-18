@@ -38,7 +38,6 @@ const DepartmentList: React.FC<{ departments: Department[] }> = ({
     };
 
     const isExpanded = (name: string) => expanded.includes(name);
-    const isSelected = (name: string) => selected.includes(name);
 
     return (
         <List>
