@@ -37,6 +37,8 @@ const DepartmentList: React.FC<{ departments: Department[] }> = ({
         setExpanded(newExpanded);
     };
 
+    const isSelected = (name: string) => selected.includes(name);
+
     const isExpanded = (name: string) => expanded.includes(name);
 
     return (
@@ -48,7 +50,11 @@ const DepartmentList: React.FC<{ departments: Department[] }> = ({
                         onClick={handleExpand(department.department)}
                     >
                         <FormControlLabel
-                            control={<Checkbox />}
+                            control={
+                                <Checkbox
+                                    checked={isSelected(department.department)}
+                                />
+                            }
                             label={department.department}
                         />
                         {isExpanded(department.department) ? (
@@ -74,7 +80,13 @@ const DepartmentList: React.FC<{ departments: Department[] }> = ({
                                             )}
                                         >
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={isSelected(
+                                                            sub_department
+                                                        )}
+                                                    />
+                                                }
                                                 label={sub_department}
                                             />
                                         </ListItem>
