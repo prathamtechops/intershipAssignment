@@ -18,7 +18,9 @@ export default function SignIn() {
     const [isFormValid, setIsFormValid] = React.useState(false);
 
     const handleInputChange = () => {
-        const data = new FormData(document.getElementById("signin-form")!);
+        const data = new FormData(
+            document.getElementById("signin-form") as HTMLFormElement
+        );
         const name = data.get("name");
         const email = data.get("email");
         const number = data.get("number");
